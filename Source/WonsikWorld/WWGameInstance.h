@@ -6,37 +6,58 @@
 #include "Engine/GameInstance.h"
 #include "IOCPClient.h"
 #include "WonsikWorldClientProxy.h"
-#include "WonsikWorldStub.h"
-#include "WWJobManager.h"
+#include "WonsikWorldClientStub.h"
+#include "WWEnum.h"
+#include <atomic>
 #include "WWGameInstance.generated.h"
 /**
  * 
  */
 UCLASS()
-class WONSIKWORLD_API UWWGameInstance : public UGameInstance, public IOCPClient, public WonsikWorldClientProxy, public WonsikWorldStub
+class WONSIKWORLD_API UWWGameInstance : public UGameInstance, public IOCPClient, public WonsikWorldClientProxy, public WonsikWorldClientStub
 {
 	GENERATED_BODY()
 public:
 	virtual void Init() override;
 	UWWGameInstance();
-private:
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<AWWJobManager> WWJobManager;
+	virtual ~UWWGameInstance();
+	
 	//Network
 protected:
-
-	SessionInfo _sessionInfo;
-	virtual void OnDisconnect(SessionInfo sessionInfo);
-	virtual void OnRecv(SessionInfo sessionInfo, CRecvBuffer& buf);
+	virtual void OnDisconnect() override;
+	virtual void OnRecv(CRecvBuffer& buf) override;
 	virtual void Run();
 public:
+	bool _onConnecting = false;
 	UPROPERTY(BlueprintReadOnly)
-	bool ConnectSuccess = true;
+	bool bConnectFail = false;
+
+	std::atomic<bool> bQuitGame = false;
+
+private:
+	short _instanceMapID= MAP_ID_LOBBY;
+	LONG64 _myPlayerID;
+	WString _myNickName;
+public:
+	bool ConncectToServer(const String& ip);
+	WString GetMyNickName();
+	void SetMyNickName(const WString& NickName);
+	short GetInstanceMapID();
+	LONG64 GetMyPlayerID();
+public:
+	class WWJobQueue* GJobQueue;
+
 	//RPC
 protected:
-	
-	
-	UFUNCTION(BlueprintCallable, Category = "Chat")
-	void SendChatMessageOnServer(FString ChatMessage);
-	virtual void ProcSendChatMessage(SessionInfo sessionInfo,String id, String chatMessage) override;
+	bool IsGameDestroyed = false;
+	virtual void ProcEnterGame_SC(short enterGameResult, LONG64 playerID) override;
+	virtual void ProcCreateMyCharacter_SC(short mapID, float dirX, float dirY, float locationX, float locationY) override;
+	virtual void ProcCreateOtherCharacter_SC(short mapID, LONG64 playerID, WString& nickName, float dirX, float dirY, float locationX, float locationY) override;
+	virtual void ProcDeleteCharacter_SC(short mapID, LONG64 palyerID) override;
+	virtual void ProcChangeMap_SC(short beforeMapID, short afterMapID) override;
+	virtual void ProcSendChatMessage_SC(short mapID, LONG64 playerID, WString& chatMessage) override;
+	virtual void ProcMoveMyCharacter_SC(short mapID, Vector<float>& destinationsX, Vector<float>& destinationsY) override;
+	virtual void ProcMoveOtherCharacter_SC(short mapID, LONG64 playerID, Vector<float>& destinationsX, Vector<float>& destinationsY) override;
+
+private:
 };
