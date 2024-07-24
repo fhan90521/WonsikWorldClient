@@ -31,6 +31,11 @@ UWWGameInstance::~UWWGameInstance()
 	CloseClient();
 }
 
+void UWWGameInstance::OnConnect()
+{
+	return ;
+}
+
 void UWWGameInstance::OnDisconnect()
 {
 	//이것도 잡으로
