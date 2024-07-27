@@ -30,8 +30,12 @@ protected:
 	virtual void Run();
 public:
 	bool _onConnecting = false;
+	
 	UPROPERTY(BlueprintReadOnly)
 	bool bConnectFail = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bNickNameDuplication = false;
 
 	std::atomic<bool> bQuitGame = false;
 

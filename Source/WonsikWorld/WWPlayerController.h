@@ -51,6 +51,7 @@ private:
 	int64 _myPlayerID;
 	WString _myNickName;
 	bool _bCanProcessJob=false;
+public:
 	bool _bChangingRoom;
 public:
 	//Recv 

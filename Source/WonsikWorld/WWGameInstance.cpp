@@ -5,6 +5,7 @@
 #include "Log.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "WWJobQueue.h"
+#include "WWPlayerController.h"
 void UWWGameInstance::Init()
 {
 	Super::Init();
@@ -99,7 +100,12 @@ void UWWGameInstance::ProcEnterGame_SC(short enterGameResult, LONG64 playerID)
 	}
 	else if (enterGameResult == NAME_DUPLICATION)
 	{
-
+		AWWPlayerController* wwPlayerController = Cast <AWWPlayerController>(GetFirstLocalPlayerController());
+		if (wwPlayerController)
+		{
+			wwPlayerController->_bChangingRoom = false;
+		}
+		bNickNameDuplication = true;
 	}
 	else
 	{
