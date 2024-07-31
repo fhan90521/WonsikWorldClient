@@ -34,6 +34,11 @@ void AWWCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void AWWCharacterBase::ClearDestinations()
+{
+	_destinations.clear();
+}
+
 void AWWCharacterBase::SetDestinaions(List<FVector>& destinations)
 {
     if (destinations.empty())

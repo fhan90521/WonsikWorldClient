@@ -196,6 +196,7 @@ void AWWPlayerController::MoveMyCharacterCS(const FVector& Destination)
 	{
 		return;
 	}
+	MyCharacter->ClearDestinations();
 	_wwGameInstance->MoveMyCharacter_CS(_pcMapID, Destination.X, Destination.Y);
 }
 
