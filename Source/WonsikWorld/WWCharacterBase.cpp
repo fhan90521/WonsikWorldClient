@@ -52,7 +52,7 @@ void AWWCharacterBase::SetDestinaions(List<FVector>& destinations)
 	FVector clientCurLocation = GetActorLocation();
 	FVector diffVector = serverStartLocation - clientCurLocation;
 	diffVector.Z = 0;
-	if (diffVector.Length() > CLOSE_DISTANCE)
+	if (diffVector.Length() > GRID_CELL_SIZE/2)
 	{
 		TeleportTo(serverStartLocation, diffVector.Rotation());
 	}

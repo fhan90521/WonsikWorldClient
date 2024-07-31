@@ -132,8 +132,8 @@ void AWWPlayerController::DeleteCharacterSC(short mapID, LONG64 playerID)
 		AWWCharacterBase** pCharacter = OtherCharacters.Find(playerID);
 		if (pCharacter!=nullptr)
 		{
-			(*pCharacter)->Destroy();
 			OtherCharacters.Remove(playerID);
+			(*pCharacter)->Destroy(true);
 		}
 	}
 }

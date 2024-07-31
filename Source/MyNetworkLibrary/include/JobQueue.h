@@ -1,19 +1,20 @@
 #pragma once
 #include "Job.h"
-#include "LockFreeQueue.h"
+#include "LockQueue.h"
+#include "MPSCQueue.h"
 #include <memory>
 #include "MyNew.h"
 #include "IOCPServer.h"
 #include "IOCPClient.h"
 #include "MyStlContainer.h"
-class JobQueue: public std::enable_shared_from_this<JobQueue>
+class JobQueue : public std::enable_shared_from_this<JobQueue>
 {
 private:
 	friend class IOCPServer;
-	friend class IOCPClient;
-	IOCPServer* _pServer = nullptr;
+	friend class WorkThreadPool;
+	HANDLE _hCompletionPort;
 	Queue<SharedPtr<JobQueue>> _selfPtrQueue;
-	LockFreeQueue<Job*> _jobQueue;
+	MPSCQueue<Job*> _jobQueue;
 	char _bProcessing = false;
 	LONG _processedJobCnt = 0;
 	void ProcessJob();
@@ -21,7 +22,8 @@ protected:
 	ULONG64 _currentTime = 0;
 	bool GetPopAuthority();
 	virtual ~JobQueue();
-	JobQueue(IOCPServer* pServer=nullptr) :_pServer(pServer) {};
+	JobQueue(HANDLE hCompletionPort = NULL) :_hCompletionPort(hCompletionPort) {};
+	void PostJob();
 public:
 	void TryDoSync(CallbackType&& callback)
 	{
@@ -43,29 +45,23 @@ public:
 	void DoAsync(CallbackType&& callback)
 	{
 		_jobQueue.Enqueue(New<Job>(std::move(callback)));
-		if (GetPopAuthority()==true)
+		if (GetPopAuthority() == true)
 		{
-			if (_pServer)
-			{
-				_pServer->PostJob(this);
-			}
+			PostJob();
 		}
 	}
 	template<typename T, typename Ret, typename... Args>
-	void DoAsync(Ret(T::* memFunc)(Args...),Args... args)
+	void DoAsync(Ret(T::* memFunc)(Args...), Args... args)
 	{
 		_jobQueue.Enqueue(New<Job>((T*)this, memFunc, std::forward<Args>(args)...));
 		if (GetPopAuthority() == true)
 		{
-			if (_pServer)
-			{
-				_pServer->PostJob(this);
-			}
+			PostJob();
 		}
 	}
 	int GetProcessedJobCnt();
 	int GetJobQueueLen();
-// Client¿ë
+	// Client¿ë
 	template<typename T, typename Ret, typename... Args>
 	void PushJob(Ret(T::* memFunc)(Args...), Args... args)
 	{
