@@ -7,7 +7,7 @@
 #include "MyStlContainer.h"
 #include<process.h>
 #include <type_traits>
-#include "LockQueue.h"
+#include "MPSCQueue.h"
 class IOCPServer
 {
 private:
@@ -40,13 +40,7 @@ private:
 	void ReleaseSession(Session* pSession);
 private:
 	const long long EXIT_TIMEOUT = 5000;
-	const long long SENDQ_MAX_LEN = 512;
-	enum IOCP_KEY
-	{
-		SERVER_DOWN = 100,
-		REQUEST_SEND,
-		PROCESS_JOB
-	};
+	const long long SENDQ_MAX_LEN = 1024;
 	int IOCP_THREAD_NUM = 0;
 	int CONCURRENT_THREAD_NUM = 0;
 	int BIND_PORT = 0;
@@ -60,7 +54,7 @@ protected:
 	std::string BIND_IP;
 private:
 	SOCKET _listenSock=INVALID_SOCKET;
-	DWORD _newSessionID = 0;
+	ULONG64 _newSessionID = 0;
 	HANDLE _hcp=INVALID_HANDLE_VALUE;
 	List<HANDLE> _hThreadList;
 	Session* _sessionArray;
@@ -79,6 +73,7 @@ public:
 	{
 	}
 	
+	HANDLE GetCompletionPortHandle();
 	CHAR _bShutdown = false;
 	bool ServerControl();
 	void Unicast(SessionInfo sessionInfo, CSendBuffer* buf, bool bDisconnect=false);
@@ -119,12 +114,7 @@ private:
 	void ReserveDisconnectManage();
 	static unsigned __stdcall ReserveDisconnectManageThreadFunc(LPVOID arg);
 public:
-	LockFreeQueue<ReserveInfo> _reserveDisconnectQ;
+	MPSCQueue<ReserveInfo> _reserveDisconnectQ;
 	List< ReserveInfo> _reserveDisconnectList;
-
-//Job
-private: 
-	friend class JobQueue;
-	void PostJob(JobQueue* pJobQueue);
 };
 

@@ -2,24 +2,34 @@
 #include "MyWindow.h"
 #include "CRingBuffer.h"
 #include "CSendBuffer.h"
-#include "LockFreeQueue.h"
-#include "LockFreeQueueBasic.h"
+#include "LockQueue.h"
+#include "MPSCQueue.h"
 #define MAX_SEND_BUF_CNT 512
 
 union SessionInfo
 {
+public:
 	typedef unsigned long long ID;
+private:
 	struct Index
 	{
 	private:
-		unsigned short reserved1;
-		unsigned short reserved2;
-		unsigned short reserved3;
+		USHORT reserved1;
+		USHORT reserved2;
+		USHORT reserved3;
 	public:
-		unsigned short val;
+		USHORT val;
 	};
+private:
+	friend class IOCPServer;
+	friend class IOCPDummyClient;
 	Index index;
 	unsigned long long id;
+public:
+	unsigned long long Id()
+	{
+		return id;
+	}
 	friend bool operator == (const SessionInfo& left, const SessionInfo& right)
 	{
 		return left.id == right.id;
@@ -36,6 +46,7 @@ struct SessionManageInfo
 	SHORT bDeallocated = true;
 	SHORT refCnt = 0;
 };
+
 struct Session
 {
 	SOCKET socket;
@@ -43,11 +54,11 @@ struct Session
 	SessionManageInfo sessionManageInfo;
 
 	CHAR bReservedDisconnect = false;
-	CHAR onConnecting=true;
+	CHAR onConnecting;
 	CHAR bSending;
 	SHORT sendBufCnt = 0;
 	OVERLAPPED sendOverLapped;
-	LockFreeQueue<CSendBuffer*> sendBufQ;
+	MPSCQueue<CSendBuffer*> sendBufQ;
 	CSendBuffer** pSendedBufArr;
 
 	OVERLAPPED recvOverLapped;
