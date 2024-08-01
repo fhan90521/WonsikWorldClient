@@ -8,14 +8,14 @@
 class RoomSystem
 {
 private:
-	USE_LOCK;
+	SRWLOCK _srwLock;
 	friend class Room;
 	class IOCPServer* _pServer = nullptr;
-	std::jthread _roomThread;
+	std::jthread* _roomUpdateThread;
 	HashMap<Room::ID,SharedPtr<Room>> _rooms;
 	HashMap<SessionInfo::ID, Room::ID> _sessionToRoomID;
 	bool bShutDown = false;
-	int _updatePeriod=30;
+	int _updatePeriod=15;
 	int _newRoomID = 0;
 	void UpdateRooms();
 	void EnterRoom(SessionInfo sessionInfo,Room* beforeRoom ,int afterRoomID);
