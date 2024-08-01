@@ -34,7 +34,7 @@ void AWWCharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void AWWCharacterBase::ClearDestinations()
+void AWWCharacterBase::Stop()
 {
 	_destinations.clear();
 }

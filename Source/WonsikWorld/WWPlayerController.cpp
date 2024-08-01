@@ -132,8 +132,8 @@ void AWWPlayerController::DeleteCharacterSC(short mapID, LONG64 playerID)
 		AWWCharacterBase** pCharacter = OtherCharacters.Find(playerID);
 		if (pCharacter!=nullptr)
 		{
+			(*pCharacter)->Destroy(true);
 			OtherCharacters.Remove(playerID);
-			(*pCharacter)->Destroy();
 		}
 	}
 }
@@ -196,7 +196,8 @@ void AWWPlayerController::MoveMyCharacterCS(const FVector& Destination)
 	{
 		return;
 	}
-	MyCharacter->ClearDestinations();
+	//멈추는 프로토콜을 사용해서 서버도 길을 못찾았을때 멈추게되면 부자연스로운 상황이 더 발생함
+	//MyCharacter->Stop();
 	_wwGameInstance->MoveMyCharacter_CS(_pcMapID, Destination.X, Destination.Y);
 }
 
