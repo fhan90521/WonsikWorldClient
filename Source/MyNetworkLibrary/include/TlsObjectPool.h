@@ -1,11 +1,11 @@
 #pragma once
-#pragma warning(disable: 4706)
 #include "LockFreeObjectPool.h"
 #include "GetMyThreadID.h"
 #include "MyWindow.h"
 #include <utility>
 #include <new.h>
 #include <iostream>
+#pragma warning(disable: 4706)
 template <typename T, bool _bPlacementNew>
 class TlsObjectPool
 {
