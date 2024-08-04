@@ -5,7 +5,7 @@
 #include <utility>
 #include <new.h>
 #include <iostream>
-#pragma warning(disable: 4706)
+#pragma warning(disable:4706)
 template <typename T, bool _bPlacementNew>
 class TlsObjectPool
 {

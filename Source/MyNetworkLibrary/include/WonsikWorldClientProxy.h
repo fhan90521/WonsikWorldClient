@@ -20,7 +20,7 @@ public:
 	void MoveMyCharacter_SC(short mapID, Vector<float>& destinationsX, Vector<float>& destinationsY, bool bDisconnect = false);
 	void MoveOtherCharacter_SC(short mapID, LONG64 playerID, Vector<float>& destinationsX, Vector<float>& destinationsY, bool bDisconnect = false);
 	void HeartBeat_CS(bool bDisconnect = false);
-	WonsikWorldClientProxy(IOCPClient* pClient=nullptr)
+	WonsikWorldClientProxy(IOCPClient* pClient = nullptr)
 	{
 		_pClient = pClient;
 	}
