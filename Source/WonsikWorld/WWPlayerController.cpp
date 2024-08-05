@@ -30,8 +30,8 @@ void AWWPlayerController::InitMap(const int mapResource[10][10])
 }
 void AWWPlayerController::ProcessJob()
 {
-	int queueLen = GJobQueue->GetJobQueueLen();
-	for (int i = 0; i < queueLen; i++)
+	size_t queueLen = GJobQueue->GetJobQueueLen();
+	for (size_t i = 0; i < queueLen; i++)
 	{
 		if (_bCanProcessJob == false)
 		{
