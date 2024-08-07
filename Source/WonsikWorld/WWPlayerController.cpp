@@ -166,10 +166,14 @@ void AWWPlayerController::MoveOtherCharacterSC(short mapID, LONG64 playerID, Lis
 		}
 	}
 }
+
+
 void AWWPlayerController::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
 	ProcessJob();
+
+	//함수 내부에서 30초 마다 실행
 	HeartBeatCS();
 }
 
