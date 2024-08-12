@@ -5,7 +5,7 @@ enum MapID : short
 	MAP_ID_FIELD1,
 	MAP_ID_FIELD2
 };
-enum RoomID
+enum RoomID : int
 {
 	ROOM_ID_LOBBY = 0,
 	ROOM_ID_FIELD1,
@@ -17,7 +17,7 @@ enum EnterGameResult : short
 	NAME_DUPLICATION,
 };
 
-enum GameOption
+enum GameOption : int
 {
 	MAP_WIDTH = 10000,
 	MAP_HEIGHT = 10000,

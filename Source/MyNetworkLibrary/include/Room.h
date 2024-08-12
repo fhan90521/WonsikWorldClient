@@ -39,7 +39,7 @@ public:
 	typedef int ID;
 	virtual ~Room();
 	Room(HANDLE hCompletionPort);
-	enum
+	enum : int
 	{
 		ENTER_DENIED,
 		ENTER_SUCCESS,

@@ -69,10 +69,9 @@ public:
 		GetSeverSetValues(settingFileName);
 		ServerSetting();
 	}
-	virtual ~IOCPServer()
-	{
-	}
-	
+
+	virtual ~IOCPServer(){}
+
 	HANDLE GetCompletionPortHandle();
 	CHAR _bShutdown = false;
 	bool ServerControl();
@@ -100,7 +99,7 @@ public:
 
 //Disconnect After Send//
 private:
-	enum
+	enum: int
 	{
 		RESERVE_DISCONNECT_MS=100
 	};
