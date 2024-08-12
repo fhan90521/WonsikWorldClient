@@ -22,9 +22,9 @@ public:
 	void QuitGame();
 	void ChangeMapSC(short beforeMapID, short afterMapID);
 	void CreateMyCharacterSC(short mapID, float dirX, float dirY, float locationX, float locationY);
-	void CreateOtherCharacterSC(short mapID, LONG64 playerID, FString nickName, float dirX, float dirY, float locationX, float locationY);
+	void CreateOtherCharacterSC(short mapID, LONG64 playerID, FString& nickName, float dirX, float dirY, float locationX, float locationY);
 	virtual void DeleteCharacterSC(short mapID, LONG64 playerID);
-	void SendChatMessageSC(short mapID, LONG64 playerID, FString chatMessage);
-	void MoveMyCharacterSC(short mapID, List<FVector> destinations);
-	void MoveOtherCharacterSC(short mapID, LONG64 playerID, List<FVector> destinations);
+	void SendChatMessageSC(short mapID, LONG64 playerID, FString& chatMessage);
+	void MoveMyCharacterSC(short mapID, List<FVector>& destinations);
+	void MoveOtherCharacterSC(short mapID, LONG64 playerID, List<FVector>& destinations);
 };
