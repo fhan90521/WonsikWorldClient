@@ -1,7 +1,7 @@
 #pragma once
 #include "MyStlContainer.h"
 #include "LockGuard.h"
-#include <stdatomic.h>
+#include <atomic>
 #include "MyWindow.h"
 template <typename T>
 class MPSCQueue
@@ -10,10 +10,10 @@ private:
 	struct alignas(64) AlignQueue
 	{
 		Queue<T> queue;
-		size_t size=0;
+		std::atomic<size_t> size=0;
 	};
 	AlignQueue _queues[2];
-	SRWLOCK _srwLock;
+	alignas(64) SRWLOCK _srwLock;
 	char _enqueueIndex = 0;
 	alignas(64) char _dequeueIndex = 1;
 	bool Flip()
@@ -35,7 +35,7 @@ public:
 	{
 		SRWLockGuard<LOCK_TYPE::EXCLUSIVE> srwLockGuard(_srwLock);
 		_queues[_enqueueIndex].queue.push(inPar);
-		_queues[_enqueueIndex].size = _queues[_enqueueIndex].size + 1;
+		_queues[_enqueueIndex].size++;
 	}
 	bool Dequeue(T* outPar)
 	{
@@ -48,7 +48,7 @@ public:
 		}
 		*outPar = _queues[_dequeueIndex].queue.front();
 		_queues[_dequeueIndex].queue.pop();
-		_queues[_dequeueIndex].size = _queues[_dequeueIndex].size - 1;
+		_queues[_dequeueIndex].size--;
 		return true;
 	}
 	size_t Size()

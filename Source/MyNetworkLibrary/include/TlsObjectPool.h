@@ -3,7 +3,7 @@
 #include "MyWindow.h"
 #include <utility>
 #include <new.h>
-#pragma warning(disable: 4706)
+#pragma warning(disable:4706)
 template <typename T, bool _bPlacementNew>
 class TlsObjectPool
 {

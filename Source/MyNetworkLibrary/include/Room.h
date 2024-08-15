@@ -4,11 +4,16 @@
 #include "Session.h"
 #include "JobQueue.h"
 #include "MyStlContainer.h"
-#define INVALID_ROOM_ID -1
-#define CHANGING_ROOM_ID -2
+
 class Room: public JobQueue
 {
 private:
+	enum : int
+	{
+		INVALID_ROOM_ID = -1,
+		CHANGING_ROOM_ID = -2,
+		LEAVE_ROOM_SYSTEM = -3
+	};
 	friend class RoomSystem;
 	class RoomSystem* _pRoomSystem=nullptr;
 	LONG _updateCnt = 0;
@@ -24,22 +29,25 @@ private:
 	void TryEnter(SessionInfo sessionInfo);
 	void Leave(SessionInfo sessionInfo,int afterRoomID);
 	void LeaveRoomSystem(SessionInfo sessionInfo);
-protected:
 	void UpdateJob();
+
+private:
 	virtual void Update(float deltaTime) = 0;
 	virtual void OnEnter(SessionInfo sessionInfo) = 0;
 	virtual int RequestEnter(SessionInfo sessionInfo) = 0;
 	virtual void OnLeave(SessionInfo sessionInfo) = 0;
 	virtual void OnLeaveRoomSystem(SessionInfo sessionInfo) = 0;
 
+protected:
 	//룸 내부에서만 호출되어야 한다
 	bool ChangeRoom(SessionInfo sessionInfo, int afterRoomID);
+	
 	//virtual bool RequestLeave(SessionInfo sessionInfo) = 0;
 public:
 	typedef int ID;
 	virtual ~Room();
 	Room(HANDLE hCompletionPort);
-	enum : int
+	enum: int
 	{
 		ENTER_DENIED,
 		ENTER_SUCCESS,

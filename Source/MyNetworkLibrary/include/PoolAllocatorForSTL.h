@@ -1,6 +1,7 @@
 #pragma once
 #pragma warning(disable : 4267)
 #include "Malloc.h"
+#include <cstddef>
 
 template<typename T>
 class PoolAllocatorForSTL
