@@ -65,9 +65,10 @@ void AWWCharacterBase::Move(float deltaTime)
 	{
 		FVector destination = _destinations.front();
 		FVector curLocation = GetActorLocation();
+		destination.Z = curLocation.Z;
+		FVector dirVec = destination - curLocation;
 		//도착했는지 확인
-		if (IsSameGrid(destination.X, destination.Y, curLocation.X, curLocation.Y, GRID_CELL_SIZE) == true &&
-			GetDistanceBetweenTwoPoint(destination.X, destination.Y, curLocation.X, curLocation.Y) < CLOSE_DISTANCE)
+		if (IsSameGrid(destination.X, destination.Y, curLocation.X, curLocation.Y, GRID_CELL_SIZE) == true && dirVec.Length() < CLOSE_DISTANCE)
 		{
 			_destinations.pop_front();
 		}
@@ -79,7 +80,7 @@ void AWWCharacterBase::Move(float deltaTime)
 		{
 			destination= _destinations.front();
 			destination.Z = curLocation.Z;
-			FVector dirVec = destination - curLocation;
+			dirVec = destination - curLocation;
 			dirVec.Normalize();
 			//dirVec로 이동
 			SetActorRotation(dirVec.Rotation());

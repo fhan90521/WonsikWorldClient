@@ -56,8 +56,8 @@ public:
 public:
 	//Recv 
 	void ChangeMapSC(short beforeMapID, short afterMapID);
-	void CreateMyCharacterSC(short mapID, float dirX, float dirY, float locationX, float locationY);
-	void CreateOtherCharacterSC(short mapID, LONG64 playerID, const FString& nickName, float dirX, float dirY, float locationX, float locationY);
+	void CreateMyCharacterSC(short mapID, FVector& dirVec, FVector& location);
+	void CreateOtherCharacterSC(short mapID, LONG64 playerID, const FString& nickName, FVector& dirVec, FVector& location);
 	void DeleteCharacterSC(short mapID, LONG64 playerID);
 	void SendChatMessageSC(short mapID, LONG64 playerID,const FString& chatMessage);
 	void MoveMyCharacterSC(short mapID, List<FVector>& destinations);

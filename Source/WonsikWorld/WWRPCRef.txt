@@ -1,0 +1,134 @@
+RPC 1
+{
+	RegisterClass : WWVector2D
+
+	//------------------------------------------------------------
+	//  게임입장
+	//
+	//	{
+	//		WORD	type
+	//	
+	//		WString	nickName					
+	//
+	//	}
+	//
+	//------------------------------------------------------------
+	EnterGame_CS(WString nickName)
+
+	//------------------------------------------------------------
+	//  게임입장 결과
+	//
+	//	{
+	//		WORD	type
+	//	
+	//		short	enterGameResult 		
+	//		LONG64	playerID;
+	//	}
+	//	enum EnterGameResult: short
+	//	{
+	//		SUCCESS,
+	//		NAME_DUPLICATION,
+	//	}
+	//------------------------------------------------------------
+	EnterGame_SC(short enterGameResult, LONG64 playerID)	
+
+	CreateMyCharacter_SC(short mapID, WWVector2D dirVec, WWVector2D location)
+	CreateOtherCharacter_SC(short mapID, LONG64 playerID, WString nickName, WWVector2D dirVec, WWVector2D location)
+	DeleteCharacter_SC(short mapID, LONG64 playerID)
+
+	//------------------------------------------------------------
+	//  맵(level) 바꾸기
+	//
+	//	{
+	//		WORD	type
+	//	
+	//		short	beforeMapID
+	//		short	afterMapID
+	//
+	//	}
+	//	enum mapID: short
+	//	{
+	//		MAINMENU,
+	//		VILLAGE,
+	//		HUNTING_FIELD
+	//	}
+	//
+	//------------------------------------------------------------
+	ChangeMap_CS(short beforeMapID,short afterMapID)
+	ChangeMap_SC(short beforeMapID,short afterMapID)
+	
+	//------------------------------------------------------------
+	//  채팅보내_CS
+	//
+	//	{
+	//		WORD	type
+	//		short	mapID				
+	//		String	chatMessage
+	//	}
+	//
+	//------------------------------------------------------------
+	SendChatMessage_CS(short mapID, WString chatMessage)
+
+	//------------------------------------------------------------
+	//  채팅보내_SC
+	//
+	//	{
+	//		WORD	type
+	//		short	mapID
+	//		LONG64 playerID
+	//		String	chatMessage
+	//	}
+	//
+	//------------------------------------------------------------
+	SendChatMessage_SC(short mapID, LONG64 playerID, WString chatMessage)	
+
+
+	//------------------------------------------------------------
+	//  MoveMyCharacter_CS 
+	//
+	//	{
+	//		WORD	type
+	//		short	mapID;
+	//		WWVector2D destination							
+	//	}
+	//	destincations[0] == 출발장소
+	//------------------------------------------------------------
+	MoveMyCharacter_CS(short mapID, WWVector2D destination)
+
+	//------------------------------------------------------------
+	//	MoveMyCharacter_SC
+	//	{
+	//		WORD	type
+	//		short	mapID;
+	//		Vector<WWVector2D> destinations;					
+	//	}
+	//	destincations[0] == 출발장소
+	//------------------------------------------------------------
+	MoveMyCharacter_SC(short mapID, Vector<WWVector2D> destinations)	
+
+	//------------------------------------------------------------
+	//	MoveOtherCharacter_SC
+	//	{
+	//		WORD	type
+	//		short	mapID;
+	//		LONG64		playerID;
+	// 		Vector<WWVector2D> destinations;	
+	//	}
+	//	destincations[0] == 출발장소
+	//------------------------------------------------------------
+	MoveOtherCharacter_SC(short mapID, LONG64 playerID, Vector<WWVector2D> destinations)	
+
+
+	//------------------------------------------------------------
+	// 하트비트
+	//
+	//	{
+	//		WORD		Type
+	//	}
+	//
+	//
+	// 클라이언트는 이를 30초마다 보내줌.
+	// 서버는 40초 이상동안 메시지 수신이 없는 클라이언트를 강제로 끊어줘야 함.
+	//------------------------------------------------------------	
+	HeartBeat_CS()
+}

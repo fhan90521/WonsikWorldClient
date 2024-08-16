@@ -126,11 +126,11 @@ void UWWGameInstance::ProcChangeMap_SC(short beforeMapID, short afterMapID)
 		UE_LOG(LogTemp, Log, TEXT("ProcChangeMap_SC not match instance map id error"));
 	}
 }
-void UWWGameInstance::ProcCreateMyCharacter_SC(short mapID, float dirX, float dirY, float locationX, float locationY)
+void UWWGameInstance::ProcCreateMyCharacter_SC(short mapID, WWVector2D& dirVec, WWVector2D& location)
 {
 	if (mapID == _instanceMapID)
 	{
-		GJobQueue->PushJob(&WWJobQueue::CreateMyCharacterSC, mapID, dirX, dirY, locationX, locationY);
+		GJobQueue->PushJob(&WWJobQueue::CreateMyCharacterSC, mapID,FVector(dirVec._x, dirVec._y,0), FVector(location._x, location._y,0));
 	}
 	else
 	{
@@ -138,11 +138,11 @@ void UWWGameInstance::ProcCreateMyCharacter_SC(short mapID, float dirX, float di
 		UE_LOG(LogTemp, Log, TEXT("ProcCreateMyCharacter_SC not match instance map id error"));
 	}
 }
-void UWWGameInstance::ProcCreateOtherCharacter_SC(short mapID, LONG64 playerID, WString& nickName, float dirX, float dirY, float locationX, float locationY)
+void UWWGameInstance::ProcCreateOtherCharacter_SC(short mapID, LONG64 playerID, WString& nickName, WWVector2D& dirVec, WWVector2D& location)
 {
 	if (mapID == _instanceMapID)
 	{
-		GJobQueue->PushJob(&WWJobQueue::CreateOtherCharacterSC, mapID,playerID,FString(nickName.c_str()), dirX, dirY, locationX, locationY);
+		GJobQueue->PushJob(&WWJobQueue::CreateOtherCharacterSC, mapID,playerID,FString(nickName.c_str()), FVector(dirVec._x,dirVec._y,0), FVector(location._x, location._y, 0));
 	}
 	else
 	{
@@ -162,23 +162,17 @@ void UWWGameInstance::ProcDeleteCharacter_SC(short mapID, LONG64 playerID)
 		UE_LOG(LogTemp, Log, TEXT("ProcDeleteCharacter_SC not match instance map id error"));
 	}
 }
-void UWWGameInstance::ProcMoveOtherCharacter_SC(short mapID, LONG64 playerID, Vector<float>& destinationsX, Vector<float>& destinationsY)
+void UWWGameInstance::ProcMoveOtherCharacter_SC(short mapID, LONG64 playerID, Vector<WWVector2D>& destinations)
 {
 	if (mapID == _instanceMapID)
 	{
-		if (destinationsX.size() == destinationsY.size())
+		
+		List<FVector> destinationList;
+		for (auto& vector2D : destinations)
 		{
-			List<FVector> destinations;
-			for (int i = 0; i < destinationsX.size(); i++)
-			{
-				destinations.push_back(FVector(destinationsX[i], destinationsY[i], 0));
-			}
-			GJobQueue->PushJob(&WWJobQueue::MoveOtherCharacterSC, mapID, playerID, destinations);
+			destinationList.push_back(FVector(vector2D._x, vector2D._y, 0));
 		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("ProcMoveOtherCharacter_SC not match destinations size error"));
-		}
+		GJobQueue->PushJob(&WWJobQueue::MoveOtherCharacterSC, mapID, playerID, destinationList);
 	}
 	else
 	{
@@ -198,23 +192,17 @@ void UWWGameInstance::ProcSendChatMessage_SC(short mapID, LONG64 playerID, WStri
 		UE_LOG(LogTemp, Log, TEXT("ProcSendChatMessage_SC not match instance map id error"));
 	}
 }
-void UWWGameInstance::ProcMoveMyCharacter_SC(short mapID, Vector<float>& destinationsX, Vector<float>& destinationsY)
+void UWWGameInstance::ProcMoveMyCharacter_SC(short mapID, Vector<WWVector2D>& destinations)
 {
 	if (mapID == _instanceMapID)
 	{
-		if (destinationsX.size() == destinationsY.size())
+		List<FVector> destinationList;
+		for (auto& vector2D : destinations)
 		{
-			List<FVector> destinations;
-			for (int i = 0; i < destinationsX.size(); i++)
-			{
-				destinations.push_back(FVector(destinationsX[i], destinationsY[i], 0));
-			}
-			GJobQueue->PushJob(&WWJobQueue::MoveMyCharacterSC, mapID, destinations);
+			destinationList.push_back(FVector(vector2D._x, vector2D._y, 0));
+			UE_LOG(LogTemp, Log, TEXT("x: %f y:%f"), vector2D._x, vector2D._y);
 		}
-		else
-		{
-			UE_LOG(LogTemp, Log, TEXT("ProcMoveMyCharacter_SC not match destinations size error"));
-		}
+		GJobQueue->PushJob(&WWJobQueue::MoveMyCharacterSC, mapID, destinationList);
 	}
 	else
 	{

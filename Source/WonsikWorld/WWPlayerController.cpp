@@ -8,6 +8,7 @@
 #include "WWGameInstance.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "MapSource.h"
+#include "WWVector2D.h"
 
 void AWWPlayerController::InitMap(const int mapResource[10][10])
 {
@@ -110,18 +111,18 @@ void AWWPlayerController::ChangeMapSC(short beforeMapID, short afterMapID)
 		//QuitGame();
 	}
 }
-void AWWPlayerController::CreateMyCharacterSC(short mapID, float dirX, float dirY, float locationX, float locationY)
+void AWWPlayerController::CreateMyCharacterSC(short mapID, FVector& dirVec, FVector& location)
 {
 	if (mapID == _pcMapID)
 	{
-		CreateMyCharacterSC_BP(FVector(dirX, dirY, 0), FVector(locationX, locationY, 0));
+		CreateMyCharacterSC_BP(dirVec, location);
 	}
 }
-void AWWPlayerController::CreateOtherCharacterSC(short mapID, LONG64 playerID, const FString& nickName, float dirX, float dirY, float locationX, float locationY)
+void AWWPlayerController::CreateOtherCharacterSC(short mapID, LONG64 playerID, const FString& nickName, FVector& dirVec, FVector& location)
 {
 	if (mapID == _pcMapID)
 	{
-		CreateOtherCharacterSC_BP(playerID,nickName, FVector(dirX, dirY, 0), FVector(locationX, locationY, 0));
+		CreateOtherCharacterSC_BP(playerID,nickName, dirVec, location);
 	}
 }
 void AWWPlayerController::DeleteCharacterSC(short mapID, LONG64 playerID)
@@ -202,7 +203,7 @@ void AWWPlayerController::MoveMyCharacterCS(const FVector& Destination)
 	}
 	//멈추는 프로토콜을 사용해서 서버도 길을 못찾았을때 멈추게되면 부자연스로운 상황이 더 발생함
 	//MyCharacter->Stop();
-	_wwGameInstance->MoveMyCharacter_CS(_pcMapID, Destination.X, Destination.Y);
+	_wwGameInstance->MoveMyCharacter_CS(_pcMapID, WWVector2D(Destination.X, Destination.Y));
 }
 
 void AWWPlayerController::SendChatMessageCS(const FString& ChatMessage)

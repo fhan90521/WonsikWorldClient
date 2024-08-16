@@ -3,6 +3,7 @@
 #include "CRecvBuffer.h"
 #include "MyStlContainer.h"
 #include "WonsikWorldPKT_TYPE.h"
+class WWVector2D;
 class WonsikWorldClientStub
 {
 public:
@@ -13,10 +14,10 @@ public:
 	virtual void ProcEnterGame_SC(short enterGameResult, LONG64 playerID) {}
 
 	bool PacketProcCreateMyCharacter_SC(CRecvBuffer& buf);
-	virtual void ProcCreateMyCharacter_SC(short mapID, float dirX, float dirY, float locationX, float locationY) {}
+	virtual void ProcCreateMyCharacter_SC(short mapID, WWVector2D& dirVec, WWVector2D& location) {}
 
 	bool PacketProcCreateOtherCharacter_SC(CRecvBuffer& buf);
-	virtual void ProcCreateOtherCharacter_SC(short mapID, LONG64 playerID, WString& nickName, float dirX, float dirY, float locationX, float locationY) {}
+	virtual void ProcCreateOtherCharacter_SC(short mapID, LONG64 playerID, WString& nickName, WWVector2D& dirVec, WWVector2D& location) {}
 
 	bool PacketProcDeleteCharacter_SC(CRecvBuffer& buf);
 	virtual void ProcDeleteCharacter_SC(short mapID, LONG64 playerID) {}
@@ -34,13 +35,13 @@ public:
 	virtual void ProcSendChatMessage_SC(short mapID, LONG64 playerID, WString& chatMessage) {}
 
 	bool PacketProcMoveMyCharacter_CS(CRecvBuffer& buf);
-	virtual void ProcMoveMyCharacter_CS(short mapID, float destinationX, float destinationY) {}
+	virtual void ProcMoveMyCharacter_CS(short mapID, WWVector2D& destination) {}
 
 	bool PacketProcMoveMyCharacter_SC(CRecvBuffer& buf);
-	virtual void ProcMoveMyCharacter_SC(short mapID, Vector<float>& destinationsX, Vector<float>& destinationsY) {}
+	virtual void ProcMoveMyCharacter_SC(short mapID, Vector<WWVector2D>& destinations) {}
 
 	bool PacketProcMoveOtherCharacter_SC(CRecvBuffer& buf);
-	virtual void ProcMoveOtherCharacter_SC(short mapID, LONG64 playerID, Vector<float>& destinationsX, Vector<float>& destinationsY) {}
+	virtual void ProcMoveOtherCharacter_SC(short mapID, LONG64 playerID, Vector<WWVector2D>& destinations) {}
 
 	bool PacketProcHeartBeat_CS(CRecvBuffer& buf);
 	virtual void ProcHeartBeat_CS() {}

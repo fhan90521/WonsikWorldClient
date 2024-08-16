@@ -21,14 +21,14 @@ void WWJobQueue::ChangeMapSC(short beforeMapID, short afterMapID)
 	_wwPlayerController->ChangeMapSC(beforeMapID, afterMapID);
 }
 
-void WWJobQueue::CreateMyCharacterSC(short mapID, float dirX, float dirY, float locationX, float locationY)
+void WWJobQueue::CreateMyCharacterSC(short mapID, FVector& dirVec, FVector& location)
 {
-	_wwPlayerController->CreateMyCharacterSC(mapID, dirX, dirY, locationX, locationY);
+	_wwPlayerController->CreateMyCharacterSC(mapID, dirVec, location);
 }
 
-void WWJobQueue::CreateOtherCharacterSC(short mapID, LONG64 playerID, FString& nickName, float dirX, float dirY, float locationX, float locationY)
+void WWJobQueue::CreateOtherCharacterSC(short mapID, LONG64 playerID, FString& nickName, FVector& dirVec, FVector& location)
 {
-	_wwPlayerController->CreateOtherCharacterSC(mapID, playerID, nickName, dirX, dirY, locationX, locationY);
+	_wwPlayerController->CreateOtherCharacterSC(mapID, playerID, nickName, dirVec, location);
 }
 
 void WWJobQueue::DeleteCharacterSC(short mapID, LONG64 playerID)
