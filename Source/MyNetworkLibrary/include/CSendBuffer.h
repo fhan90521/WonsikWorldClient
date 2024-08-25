@@ -7,6 +7,8 @@
 #include "MyWindow.h"
 #include "MyStlContainer.h"
 #include <iostream>
+#include <atomic>
+#define CHECK_SENDBUF_CNT
 class CSendBuffer
 {
 private:
@@ -16,9 +18,13 @@ private:
 	enum enCSendBuffer: int
 	{
 		eBUFFER_DEFAULT = 512, // 패킷의 기본 버퍼 사이즈.
-		eBUFFER_MAX_SIZE = 5000
+		eBUFFER_MAX_SIZE = 4096
 	};
 	typedef TlsObjectPool<CSendBuffer, false> BufferPool;
+#ifdef CHECK_SENDBUF_CNT
+	inline static std::atomic<int> _allocCnt=0;
+#endif
+
 	friend class BufferPool;
 	char* _buf;
 	int	_bufferSize;
@@ -88,14 +94,19 @@ private:
 		return (LanHeader*)(_buf + sizeof(WanHeader) - sizeof(LanHeader));
 	}
 public:
+#ifdef CHECK_SENDBUF_CNT
 	static LONG GetAllocCnt()
 	{
-		return _bufferPool.GetAllocCnt();
+		return _allocCnt;
 	}
+#endif
 	static CSendBuffer* Alloc()
 	{
 		CSendBuffer* pBuf = _bufferPool.Alloc();
 		pBuf->Clear();
+#ifdef CHECK_SENDBUF_CNT
+		_allocCnt++;
+#endif
 		return pBuf;
 	}
 	void IncrementRefCnt()
@@ -107,6 +118,9 @@ public:
 		if (InterlockedDecrement(&_refCnt) == 0)
 		{
 			_bufferPool.Free(this);
+#ifdef CHECK_SENDBUF_CNT
+			_allocCnt--;
+#endif
 		}
 	}
 	void Clear()
