@@ -22,15 +22,10 @@ private:
 			{
 				pMemoryHeader = (MemoryHeader*)((char*)pBlock + (i * chunkSize));
 				pMemoryHeader->allocSize = chunkSize;
-				if (i == chunkPerBlock - 1)
-				{
-					pMemoryHeader->pNext = nullptr;
-				}
-				else
-				{
-					pMemoryHeader->pNext = (MemoryHeader*)((char*)pMemoryHeader + chunkSize);
-				}
+				pMemoryHeader->pNext = (MemoryHeader*)((char*)pMemoryHeader + chunkSize);
 			}
+			pMemoryHeader->pNext = nullptr;
+
 			allocPtr = pBlock;
 			pTop = (MemoryHeader*)pBlock;
 		}
@@ -40,7 +35,7 @@ private:
 		}
 	};
 
-	struct PoolState: SLIST_ENTRY
+	struct alignas(64) PoolState: SLIST_ENTRY
 	{
 		MemoryHeader* pTop = nullptr;
 		MemoryHeader* pFreePrev = nullptr;
