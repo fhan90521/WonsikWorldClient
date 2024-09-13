@@ -36,7 +36,10 @@ void UWWGameInstance::OnConnect()
 {
 	return ;
 }
-
+void UWWGameInstance::OnConnectFail()
+{
+	return;
+}
 void UWWGameInstance::OnDisconnect()
 {
 	//이것도 잡으로
@@ -130,7 +133,9 @@ void UWWGameInstance::ProcCreateMyCharacter_SC(short mapID, WWVector2D& dirVec, 
 {
 	if (mapID == _instanceMapID)
 	{
-		GJobQueue->PushJob(&WWJobQueue::CreateMyCharacterSC, mapID,FVector(dirVec._x, dirVec._y,0), FVector(location._x, location._y,0));
+		FVector DirVec(dirVec._x, dirVec._y, 0);
+		FVector LocationVec(location._x, location._y, 0);
+		GJobQueue->PushJob(&WWJobQueue::CreateMyCharacterSC, mapID, DirVec, LocationVec);
 	}
 	else
 	{
@@ -142,7 +147,10 @@ void UWWGameInstance::ProcCreateOtherCharacter_SC(short mapID, LONG64 playerID, 
 {
 	if (mapID == _instanceMapID)
 	{
-		GJobQueue->PushJob(&WWJobQueue::CreateOtherCharacterSC, mapID,playerID,FString(nickName.c_str()), FVector(dirVec._x,dirVec._y,0), FVector(location._x, location._y, 0));
+		FString NickName(nickName.c_str());
+		FVector DirVec(dirVec._x, dirVec._y, 0);
+		FVector LocationVec(location._x, location._y, 0);
+		GJobQueue->PushJob(&WWJobQueue::CreateOtherCharacterSC, mapID,playerID,std::move(NickName), DirVec, LocationVec);
 	}
 	else
 	{
@@ -170,7 +178,7 @@ void UWWGameInstance::ProcMoveOtherCharacter_SC(short mapID, LONG64 playerID, Ve
 		List<FVector> destinationList;
 		for (auto& vector2D : destinations)
 		{
-			destinationList.push_back(FVector(vector2D._x, vector2D._y, 0));
+			destinationList.emplace_back(vector2D._x, vector2D._y, 0);
 		}
 		GJobQueue->PushJob(&WWJobQueue::MoveOtherCharacterSC, mapID, playerID, destinationList);
 	}
@@ -184,7 +192,8 @@ void UWWGameInstance::ProcSendChatMessage_SC(short mapID, LONG64 playerID, WStri
 {
 	if (mapID == _instanceMapID)
 	{
-		GJobQueue->PushJob(&WWJobQueue::SendChatMessageSC, mapID, playerID,FString(chatMessage.c_str()));
+		FString ChatMessage(chatMessage.c_str());
+		GJobQueue->PushJob(&WWJobQueue::SendChatMessageSC, mapID, playerID,std::move(ChatMessage));
 	}
 	else
 	{
@@ -199,8 +208,8 @@ void UWWGameInstance::ProcMoveMyCharacter_SC(short mapID, Vector<WWVector2D>& de
 		List<FVector> destinationList;
 		for (auto& vector2D : destinations)
 		{
-			destinationList.push_back(FVector(vector2D._x, vector2D._y, 0));
-			UE_LOG(LogTemp, Log, TEXT("x: %f y:%f"), vector2D._x, vector2D._y);
+			destinationList.emplace_back(vector2D._x, vector2D._y, 0);
+			//UE_LOG(LogTemp, Log, TEXT("x: %f y:%f"), vector2D._x, vector2D._y);
 		}
 		GJobQueue->PushJob(&WWJobQueue::MoveMyCharacterSC, mapID, destinationList);
 	}

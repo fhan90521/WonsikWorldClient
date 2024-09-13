@@ -26,6 +26,7 @@ public:
 	//Network
 protected:
 	virtual void OnConnect() override;
+	virtual void OnConnectFail() override;
 	virtual void OnDisconnect() override;
 	virtual void OnRecv(CRecvBuffer& buf) override;
 	virtual void Run();
