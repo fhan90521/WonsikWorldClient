@@ -25,6 +25,6 @@ public:
 	void CreateOtherCharacterSC(short mapID, LONG64 playerID, FString nickName, FVector& dirVec, FVector& location);
 	virtual void DeleteCharacterSC(short mapID, LONG64 playerID);
 	void SendChatMessageSC(short mapID, LONG64 playerID, FString chatMessage);
-	void MoveMyCharacterSC(short mapID, List<FVector>& destinations);
-	void MoveOtherCharacterSC(short mapID, LONG64 playerID, List<FVector>& destinations);
+	void MoveMyCharacterSC(short mapID, List<FVector> destinations);
+	void MoveOtherCharacterSC(short mapID, LONG64 playerID, List<FVector> destinations);
 };

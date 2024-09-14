@@ -170,24 +170,6 @@ void UWWGameInstance::ProcDeleteCharacter_SC(short mapID, LONG64 playerID)
 		UE_LOG(LogTemp, Log, TEXT("ProcDeleteCharacter_SC not match instance map id error"));
 	}
 }
-void UWWGameInstance::ProcMoveOtherCharacter_SC(short mapID, LONG64 playerID, Vector<WWVector2D>& destinations)
-{
-	if (mapID == _instanceMapID)
-	{
-		
-		List<FVector> destinationList;
-		for (auto& vector2D : destinations)
-		{
-			destinationList.emplace_back(vector2D._x, vector2D._y, 0);
-		}
-		GJobQueue->PushJob(&WWJobQueue::MoveOtherCharacterSC, mapID, playerID, destinationList);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Log, TEXT("ProcMoveOtherCharacter_SC not match instance map id error"));
-		//Disconnect(sessionInfo);
-	}
-}
 void UWWGameInstance::ProcSendChatMessage_SC(short mapID, LONG64 playerID, WString& chatMessage)
 {
 	if (mapID == _instanceMapID)
@@ -201,6 +183,7 @@ void UWWGameInstance::ProcSendChatMessage_SC(short mapID, LONG64 playerID, WStri
 		UE_LOG(LogTemp, Log, TEXT("ProcSendChatMessage_SC not match instance map id error"));
 	}
 }
+
 void UWWGameInstance::ProcMoveMyCharacter_SC(short mapID, Vector<WWVector2D>& destinations)
 {
 	if (mapID == _instanceMapID)
@@ -211,11 +194,30 @@ void UWWGameInstance::ProcMoveMyCharacter_SC(short mapID, Vector<WWVector2D>& de
 			destinationList.emplace_back(vector2D._x, vector2D._y, 0);
 			//UE_LOG(LogTemp, Log, TEXT("x: %f y:%f"), vector2D._x, vector2D._y);
 		}
-		GJobQueue->PushJob(&WWJobQueue::MoveMyCharacterSC, mapID, destinationList);
+		GJobQueue->PushJob(&WWJobQueue::MoveMyCharacterSC, mapID, std::move(destinationList));
 	}
 	else
 	{
 		UE_LOG(LogTemp, Log, TEXT("ProcMoveMyCharacter_SC not match instance map id error"));
+		//Disconnect(sessionInfo);
+	}
+}
+
+void UWWGameInstance::ProcMoveOtherCharacter_SC(short mapID, LONG64 playerID, Vector<WWVector2D>& destinations)
+{
+	if (mapID == _instanceMapID)
+	{
+
+		List<FVector> destinationList;
+		for (auto& vector2D : destinations)
+		{
+			destinationList.emplace_back(vector2D._x, vector2D._y, 0);
+		}
+		GJobQueue->PushJob(&WWJobQueue::MoveOtherCharacterSC, mapID, playerID, std::move(destinationList));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("ProcMoveOtherCharacter_SC not match instance map id error"));
 		//Disconnect(sessionInfo);
 	}
 }

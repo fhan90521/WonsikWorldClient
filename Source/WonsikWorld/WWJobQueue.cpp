@@ -41,12 +41,12 @@ void WWJobQueue::SendChatMessageSC(short mapID, LONG64 playerID, FString chatMes
 	_wwPlayerController->SendChatMessageSC(mapID, playerID, chatMessage);
 }
 
-void WWJobQueue::MoveMyCharacterSC(short mapID, List<FVector>& destinations)
+void WWJobQueue::MoveMyCharacterSC(short mapID, List<FVector> destinations)
 {
 	_wwPlayerController->MoveMyCharacterSC(mapID, destinations);
 }
 
-void WWJobQueue::MoveOtherCharacterSC(short mapID, LONG64 playerID, List<FVector>& destinations)
+void WWJobQueue::MoveOtherCharacterSC(short mapID, LONG64 playerID, List<FVector> destinations)
 {
 	_wwPlayerController->MoveOtherCharacterSC(mapID, playerID, destinations);
 }
