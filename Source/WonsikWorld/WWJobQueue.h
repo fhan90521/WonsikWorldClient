@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "JobQueue.h"
+#include "Job/JobQueue.h"
 /**
  * 
  */

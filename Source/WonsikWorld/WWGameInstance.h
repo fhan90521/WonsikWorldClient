@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "IOCPClient.h"
+#include "Network/IOCPClient.h"
 #include "WonsikWorldClientProxy.h"
 #include "WonsikWorldClientStub.h"
 #include "WWEnum.h"

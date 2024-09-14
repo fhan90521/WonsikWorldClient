@@ -2,7 +2,6 @@
 
 
 #include "WWGameInstance.h"
-#include "Log.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "WWJobQueue.h"
 #include "WWPlayerController.h"

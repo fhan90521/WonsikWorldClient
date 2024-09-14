@@ -1,7 +1,7 @@
 #pragma once
-#include "Session.h"
-#include "IOCPClient.h"
-#include "MyStlContainer.h"
+#include "Network/Session.h"
+#include "Network/IOCPClient.h"
+#include "Container/MyStlContainer.h"
 class WWVector2D;
 class WonsikWorldClientProxy
 {

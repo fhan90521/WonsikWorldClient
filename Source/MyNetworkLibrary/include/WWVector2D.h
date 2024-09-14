@@ -1,12 +1,12 @@
 #pragma once
-#include "CSendBuffer.h"
-#include "CRecvBuffer.h"
-#include "MyStlContainer.h"
+#include "Buffer/CSendBuffer.h"
+#include "Buffer/CRecvBuffer.h"
+#include "Container/MyStlContainer.h"
 class WWVector2D
 {
 public:
-	float _x=0;
-	float _y=0;
+	float _x;
+	float _y;
 	void Normalize();
 	float Length();
 	std::pair<float, float> TransferToPair();
