@@ -1,12 +1,11 @@
 #pragma once
 #include "Network/Session.h"
-#include "Network/IOCPClient.h"
 #include "Container/MyStlContainer.h"
 class WWVector2D;
 class WonsikWorldClientProxy
 {
 private:
-	IOCPClient* _pClient;
+	class IOCPClient* _pClient;
 public:
 	void EnterGame_CS(const WString& nickName, bool bDisconnect = false);
 	void EnterGame_SC(short enterGameResult, LONG64 playerID, bool bDisconnect = false);
@@ -21,7 +20,7 @@ public:
 	void MoveMyCharacter_SC(short mapID, const Vector<WWVector2D>& destinations, bool bDisconnect = false);
 	void MoveOtherCharacter_SC(short mapID, LONG64 playerID, const Vector<WWVector2D>& destinations, bool bDisconnect = false);
 	void HeartBeat_CS(bool bDisconnect = false);
-	WonsikWorldClientProxy(IOCPClient* pClient=nullptr)
+	WonsikWorldClientProxy(class IOCPClient* pClient=nullptr)
 	{
 		_pClient = pClient;
 	}
