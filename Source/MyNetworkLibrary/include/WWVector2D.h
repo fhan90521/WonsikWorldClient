@@ -15,5 +15,5 @@ public:
 	friend CRecvBuffer& operator>>(CRecvBuffer& buf, WWVector2D& vec);
 	friend CSendBuffer& operator<<(CSendBuffer& buf, const Vector<WWVector2D>& vectors);
 	friend CRecvBuffer& operator>>(CRecvBuffer& buf, Vector<WWVector2D>& vectors);
-	friend WWVector2D operator-(WWVector2D vec1, WWVector2D vec2);
+	friend WWVector2D operator-(const WWVector2D& vec1,const WWVector2D& vec2);
 };
